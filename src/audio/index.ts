@@ -1,0 +1,1 @@
+export { AudioDirectiveDescriptor } from "./AudioDescriptor";

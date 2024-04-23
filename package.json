@@ -1,0 +1,24 @@
+{
+  "name": "mdx-descriptors",
+  "version": "1.0.0",
+  "description": "A collection of markdown descriptors for mdx-editor",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psu-psychosupport/mdx-descriptors.git"
+  },
+  "author": "Damego",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psu-psychosupport/mdx-descriptors/issues"
+  },
+  "homepage": "https://github.com/psu-psychosupport/mdx-descriptors#readme",
+  "peerDependencies": {
+    "@mdxeditor/editor": "^3.0.1",
+    "react": "^18.2.0",
+    "reactflow": "^11.11.2"
+  }
+}

@@ -1,0 +1,1 @@
+export { EmbedDirectiveDescriptor } from "./EmbedDescriptor";
