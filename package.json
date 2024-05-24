@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/psu-psychosupport/mdx-descriptors#readme",
   "peerDependencies": {
-    "@mdxeditor/editor": "^3.0.1",
+    "@mdxeditor/editor": "^2.0.0",
     "@mui/icons-material": "^5.15.18",
     "@mui/material": "^5.15.18",
     "@remix-run/react": "^2.9.2",
