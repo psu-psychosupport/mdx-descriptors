@@ -29,7 +29,7 @@ const PresentationViewer = ({ url }: { url: string }) => {
   };
 
   return (
-    <div>
+    <Stack justifyContent={"center"}>
       <Document
         file={url}
         onLoadSuccess={({ numPages }) => setPagesCount(numPages)}
@@ -47,7 +47,7 @@ const PresentationViewer = ({ url }: { url: string }) => {
           <NavigateNextIcon />
         </IconButton>
       </Stack>
-    </div>
+    </Stack>
   );
 };
 

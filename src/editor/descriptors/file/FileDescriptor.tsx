@@ -2,7 +2,7 @@ import { LeafDirective } from "mdast-util-directive";
 import { DirectiveDescriptor } from "@mdxeditor/editor";
 import React from "react";
 import DescriptorTemplate from "../DescriptorTemplate";
-import FileDownload from "~/components/FileDownload";
+import FileDownload from "../../../components/FileDownload";
 
 interface FileDirectiveNode extends LeafDirective {
   name: "file";

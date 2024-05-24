@@ -1,8 +1,6 @@
 import { LeafDirective } from "mdast-util-directive";
 import { DirectiveDescriptor } from "@mdxeditor/editor";
 import React from "react";
-import { IconButton } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
 import DescriptorTemplate from "../DescriptorTemplate";
 
 interface DiagramDirectiveNode extends LeafDirective {
