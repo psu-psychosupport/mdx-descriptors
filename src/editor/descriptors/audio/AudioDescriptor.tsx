@@ -1,6 +1,7 @@
 import { LeafDirective } from "mdast-util-directive";
 import { DirectiveDescriptor } from "@mdxeditor/editor";
 import React from "react";
+import DescriptorTemplate from "../DescriptorTemplate";
 
 interface AudioDirectiveNode extends LeafDirective {
   name: "audio";
@@ -17,31 +18,22 @@ const AudioDirectiveDescriptor: DirectiveDescriptor<AudioDirectiveNode> = {
   hasChildren: false,
   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
+      <DescriptorTemplate
+        onDelete={() => {
+          parentEditor.update(() => {
+            lexicalNode.selectNext();
+            lexicalNode.remove();
+          });
         }}
       >
-        <button
-          onClick={() => {
-            parentEditor.update(() => {
-              lexicalNode.selectNext();
-              lexicalNode.remove();
-            });
-          }}
-        >
-          delete
-        </button>
         <audio
           src={mdastNode.attributes?.url}
           title="Audio player"
           controls
         ></audio>
-      </div>
+      </DescriptorTemplate>
     );
   },
 };
 
-export {AudioDirectiveDescriptor};
+export { AudioDirectiveDescriptor };

@@ -4,8 +4,10 @@
   "description": "A collection of markdown descriptors for mdx-editor",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/psu-psychosupport/mdx-descriptors.git"
@@ -18,7 +20,17 @@
   "homepage": "https://github.com/psu-psychosupport/mdx-descriptors#readme",
   "peerDependencies": {
     "@mdxeditor/editor": "^3.0.1",
+    "@remix-run/react": "^2.9.2",
+    "i18next": "^23.11.5",
     "react": "^18.2.0",
     "reactflow": "^11.11.2"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^5.15.18",
+    "@mui/material": "^5.15.18"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5"
   }
 }

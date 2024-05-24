@@ -1,0 +1,86 @@
+{
+  "dialogControls": {
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  },
+  "uploadImage": {
+    "uploadInstructions": "Загрузите изображение со своего устройства:",
+    "addViaUrlInstructions": "Или добавьте его через ссылку:",
+    "autoCompletePlaceholder": "Выберите или вставьте изображение",
+    "alt": "Alt:",
+    "title": "Заголовок:"
+  },
+  "imageEditor": {
+    "editImage": "Изменить изображение"
+  },
+  "createLink": {
+    "url": "URL",
+    "urlPlaceholder": "Укажите ссылку",
+    "title": "Заголовок",
+    "saveTooltip": "Установить ссылку",
+    "cancelTooltip": "Отменить"
+  },
+  "linkPreview": {
+    "open": "Открыть {{url}} в новом окне",
+    "edit": "Изменить ссылку",
+    "copyToClipboard": "Скопировать в буфер обмена",
+    "copied": "Скопировано!",
+    "remove": "Удалить ссылку"
+  },
+  "table": {
+    "deleteTable": "Удалить таблицу",
+    "columnMenu": "Меню колонки",
+    "textAlignment": "Выравнивание текста",
+    "alignLeft": "Слева",
+    "alignCenter": "По центру",
+    "alignRight": "Справа",
+    "insertColumnLeft": "Добавить колонку слева",
+    "insertColumnRight": "Добавить колонку справа",
+    "deleteColumn": "Удалить колонку",
+    "rowMenu": "Меню строки",
+    "insertRowAbove": "Добавить строку выше",
+    "insertRowBelow": "Добавить строку ниже",
+    "deleteRow": "Delete this row"
+  },
+  "toolbar": {
+    "blockTypes": {
+      "paragraph": "Параграф",
+      "quote": "Цитата",
+      "heading": "Заголовок {{level}}"
+    },
+    "blockTypeSelect": {
+      "selectBlockTypeTooltip": "Выбрать тип блока",
+      "placeholder": "Тип блока"
+    },
+    "removeBold": "Удалить жирный",
+    "bold": "Жирный",
+    "removeItalic": "Удалить наклонный",
+    "italic": "Наклонный",
+    "underline": "Подчёркивание",
+    "removeUnderline": "Удалить подчёркивание",
+    "removeInlineCode": "Удалить однострочный код",
+    "inlineCode": "Однострочный код",
+    "link": "Создать ссылку",
+    "richText": "Расширенный текст",
+    "diffMode": "Режим изменений",
+    "source": "Режим исходного текста",
+    "admonition": "Вставить замечание",
+    "image": "Вставить изображение",
+    "table": "Вставить таблицу",
+    "thematicBreak": "Вставить разделительную линию",
+    "bulletedList": "Маркированный список",
+    "numberedList": "Нумерованный список",
+    "checkList": "Чек-лист",
+    "undo": "Отменить {{shortcut}}",
+    "redo": "Вернуть {{shortcut}}"
+  },
+  "admonitions": {
+    "note": "Заметка",
+    "tip": "Подсказка",
+    "danger": "Опасность",
+    "info": "Информация",
+    "caution": "Осторожность",
+    "changeType": "Выбрать тип замечания",
+    "placeholder": "Тип замечания"
+  }
+}

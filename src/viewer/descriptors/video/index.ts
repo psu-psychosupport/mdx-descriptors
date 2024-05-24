@@ -1,0 +1,2 @@
+export { VideoDirectiveDescriptor } from "./VideoDescriptor";
+

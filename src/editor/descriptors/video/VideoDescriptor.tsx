@@ -1,6 +1,7 @@
 import { LeafDirective } from "mdast-util-directive";
 import { DirectiveDescriptor } from "@mdxeditor/editor";
 import React from "react";
+import DescriptorTemplate from "../DescriptorTemplate";
 
 interface VideoDirectiveNode extends LeafDirective {
   name: "video";
@@ -17,25 +18,14 @@ const VideoDirectiveDescriptor: DirectiveDescriptor<VideoDirectiveNode> = {
   hasChildren: false,
   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
+      <DescriptorTemplate
+        onDelete={() => {
+          parentEditor.update(() => {
+            lexicalNode.selectNext();
+            lexicalNode.remove();
+          });
         }}
       >
-        <button
-          onClick={() => {
-            parentEditor.update(() => {
-              lexicalNode.selectNext();
-              lexicalNode.selectNext();
-              lexicalNode.remove();
-            });
-          }}
-        >
-          delete
-        </button>
-
         <video
           width={mdastNode.attributes?.width || "560"}
           height={mdastNode.attributes?.height || "315"}
@@ -43,9 +33,9 @@ const VideoDirectiveDescriptor: DirectiveDescriptor<VideoDirectiveNode> = {
           title="Video player"
           controls
         ></video>
-      </div>
+      </DescriptorTemplate>
     );
   },
 };
 
-export {VideoDirectiveDescriptor};
+export { VideoDirectiveDescriptor };
