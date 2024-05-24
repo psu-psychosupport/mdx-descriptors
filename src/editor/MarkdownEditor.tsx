@@ -4,7 +4,7 @@ import { plugins } from "./plugins";
 import i18next from "i18next";
 import translation from "../locales/ru/translation.json";
 import { MDXEditorMethods } from "@mdxeditor/editor";
-import "./inter.css"
+import "../styles/inter.css"
 
 i18next.init({
   lng: "ru",

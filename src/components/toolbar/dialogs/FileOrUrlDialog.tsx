@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 
 import classNames from "classnames";
 import { useCombobox } from "downshift";
-import styles from "./ui.module.css";
+import styles from "../../../styles/main.css";
 import {
   TooltipWrap,
   editorRootElementRef$,

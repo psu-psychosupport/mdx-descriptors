@@ -1,10 +1,10 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import * as RadixToolbar from "@radix-ui/react-toolbar";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 import classNames from "classnames";
-import styles from "./ui.module.css";
+import styles from "../../../styles/main.css";
 import {
   TooltipWrap,
   editorRootElementRef$,
@@ -12,7 +12,6 @@ import {
   readOnly$,
 } from "@mdxeditor/editor";
 import { useCellValue, useCellValues } from "@mdxeditor/gurx";
-import { useFetcher } from "@remix-run/react";
 
 export interface IDialogSubmit {
   file: FileList;
