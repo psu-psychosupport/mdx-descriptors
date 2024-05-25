@@ -4,7 +4,7 @@ import * as RadixToolbar from "@radix-ui/react-toolbar";
 import React, { useRef } from "react";
 
 import classNames from "classnames";
-import styles from "../../../styles/main.css";
+import styles from "../../../styles/main.module.css";
 import {
   TooltipWrap,
   editorRootElementRef$,
