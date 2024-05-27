@@ -22,7 +22,7 @@ import AudioButton from "./buttons/AudioButton";
 import VideoButton from "./buttons/VideoButton";
 import InsertPresentation from "./buttons/PresentationButton";
 import FileButton from "./buttons/FileButton";
-import InsertTest from "./buttons/TestButton";
+import InsertTest from "./buttons/InsertTest";
 
 function whenInAdmonition(editorInFocus: EditorInFocus | null) {
   const node = editorInFocus?.rootNode;
