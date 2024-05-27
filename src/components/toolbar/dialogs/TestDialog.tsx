@@ -1,153 +1,321 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import * as RadixToolbar from "@radix-ui/react-toolbar";
-
-import React, { useRef } from "react";
-
-import classNames from "classnames";
-import styles from "../../../styles/main.css";
 import {
-  TooltipWrap,
-  editorRootElementRef$,
-  iconComponentFor$,
-  readOnly$,
-} from "@mdxeditor/editor";
-import { useCellValue, useCellValues } from "@mdxeditor/gurx";
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Pagination,
+  Stack,
+  TextField,
+} from "@mui/material";
+import React, { useState } from "react";
+import {
+  Add as AddIcon,
+  Check as CheckIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
+import { ITest, ITestQuestion, TestTypes } from "../../../types/test";
+import { SelectTestType } from "../../SelectTestType";
+import { toast } from "react-toastify";
 
-export interface IDialogSubmit {
-  file: FileList;
-}
-
-export const FileDialog = React.forwardRef<
-  HTMLButtonElement,
-  {
-    /**
-     * The callback to call when the dialog is submitted. The callback receives the value of the text input as a parameter.
-     */
-    onSubmit: (data: IDialogSubmit) => void;
-    /**
-     * The title to show in the tooltip of the toolbar button.
-     */
-    tooltipTitle: string;
-    /**
-     * The contents of the button. Usually an icon.
-     * @example
-     * ```tsx
-     * <DialogButton buttonContent={<CustomIcon />} />
-     * ```
-     */
-    buttonContent?: React.ReactNode;
-    /**
-     * The title of the submit button.
-     */
-    submitButtonTitle: string;
-    uploadFileTitle: string;
-    acceptFileTypes: string;
-  }
->(
-  (
-    {
-      submitButtonTitle,
-      uploadFileTitle,
-      onSubmit,
-      tooltipTitle,
-      buttonContent,
-      acceptFileTypes,
-    },
-    forwardedRef,
-  ) => {
-    const [editorRootElementRef, readOnly] = useCellValues(
-      editorRootElementRef$,
-      readOnly$,
-    );
-    const [open, setOpen] = React.useState(false);
-
-    const onSubmitCallback = React.useCallback(
-      (data: IDialogSubmit) => {
-        onSubmit(data);
-        setOpen(false);
-      },
-      [onSubmit],
-    );
-
-    return (
-      <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Trigger asChild>
-          <RadixToolbar.Button
-            className={styles.toolbarButton}
-            ref={forwardedRef}
-            disabled={readOnly}
-          >
-            <TooltipWrap title={tooltipTitle}>{buttonContent}</TooltipWrap>
-          </RadixToolbar.Button>
-        </Dialog.Trigger>
-        <Dialog.Portal container={editorRootElementRef?.current}>
-          <Dialog.Overlay className={styles.dialogOverlay} />
-          <Dialog.Content className={styles.dialogContent}>
-            <DialogForm
-              uploadFileTitle={uploadFileTitle}
-              submitButtonTitle={submitButtonTitle}
-              onSubmitCallback={onSubmitCallback}
-              acceptFileTypes={acceptFileTypes}
-            />
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    );
-  },
-);
-
-const DialogForm: React.FC<{
-  submitButtonTitle: string;
-  uploadFileTitle: string;
-  onSubmitCallback: (data: IDialogSubmit) => void;
-  acceptFileTypes: string;
-}> = ({
-  onSubmitCallback,
-  submitButtonTitle,
-  uploadFileTitle,
-  acceptFileTypes,
+const OptionsForm = ({
+  question,
+  onUpdate,
+}: {
+  question: ITestQuestion;
+  onUpdate: (question: ITestQuestion) => void;
 }) => {
-  const fileRef = useRef<HTMLInputElement>();
-  const iconComponentFor = useCellValue(iconComponentFor$);
+  const updateOptionText = (option: string, index: number) => {
+    question.options![index] = option;
+    onUpdate({ ...question });
+  };
 
-  const onSubmitEH = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onSubmitCallback({
-      file: fileRef.current!.files!,
+  const setValidOption = (index: number) => {
+    question.validOptionIndex = index;
+    onUpdate({ ...question });
+  };
+
+  const deleteOption = (index: number) => {
+    onUpdate({
+      ...question,
+      options: question.options!.filter((opt, ind) => ind !== index),
+    });
+  };
+
+  const addOption = () => {
+    question.options!.push("");
+    onUpdate({ ...question });
+  };
+
+  return (
+    <>
+      {question.options?.map((option, index) => (
+        <Box
+          key={index}
+          sx={{
+            display: "flex",
+            justifyContent: "row",
+            alignItems: "center",
+          }}
+        >
+          <TextField
+            label={"Вариант ответа"}
+            fullWidth
+            value={option}
+            onChange={(event) => updateOptionText(event.target.value, index)}
+            color={index === question.validOptionIndex ? "success" : undefined}
+            focused={index === question.validOptionIndex}
+          />
+          {index !== question.validOptionIndex && (
+            <IconButton onClick={() => setValidOption(index)}>
+              <CheckIcon />
+            </IconButton>
+          )}
+          <IconButton
+            aria-label={"Удалить вариант"}
+            onClick={() => deleteOption(index)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ))}
+      <Button startIcon={<AddIcon />} variant={"outlined"} onClick={addOption}>
+        Добавить вариант ответа
+      </Button>
+    </>
+  );
+};
+
+const InputForm = ({
+  question,
+  onUpdate,
+}: {
+  question: ITestQuestion;
+  onUpdate: (question: ITestQuestion) => void;
+}) => {
+  const onTextChange = (text: string) => {
+    onUpdate({ ...question, validTextInput: text });
+  };
+
+  return (
+    <Box>
+      <TextField
+        label={"Ответ на вопрос"}
+        fullWidth
+        value={question.validTextInput}
+        onChange={(event) => onTextChange(event.target.value)}
+      />
+    </Box>
+  );
+};
+
+const Question = ({
+  question,
+  onUpdate,
+  onDelete,
+  allowDelete,
+}: {
+  question: ITestQuestion;
+  onUpdate: (question: ITestQuestion) => void;
+  onDelete: () => void;
+  allowDelete: boolean;
+}) => {
+  let form: React.ReactNode;
+
+  if (question.type === TestTypes.OPTIONS) {
+    form = <OptionsForm question={question} onUpdate={onUpdate} />;
+  } else if (question.type === TestTypes.INPUT) {
+    form = <InputForm question={question} onUpdate={onUpdate} />;
+  }
+
+  const onTitleChange = (title: string) => {
+    onUpdate({ ...question, title });
+  };
+
+  return (
+    <Stack gap={2}>
+      <SelectTestType
+        value={question.type}
+        onChange={(val) =>
+          onUpdate({ ...question, type: Number.parseInt(val.target.value) })
+        }
+      />
+      <Stack direction={"row"}>
+        <TextField
+          label={"Вопрос"}
+          fullWidth
+          value={question.title}
+          onChange={(event) => onTitleChange(event.target.value)}
+        />
+        {allowDelete && (
+          <IconButton onClick={onDelete}>
+            <DeleteIcon color={"error"} />
+          </IconButton>
+        )}
+      </Stack>
+      {form}
+    </Stack>
+  );
+};
+
+export default function TestDialog({
+  test,
+  isOpen,
+  onClose,
+  onSubmit,
+}: {
+  test?: ITest;
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (test: ITest) => void;
+}) {
+  const [$test, setTest] = useState<ITest>(
+    test ??
+      ({
+        name: "",
+        questions: [
+          {
+            type: TestTypes.OPTIONS,
+            options: [],
+            validOptionIndex: -1,
+            title: "",
+          },
+        ],
+      } as ITest),
+  );
+  const [pagesCount, setPagesCount] = useState<number>(
+    test ? test.questions.length : 1,
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const preSubmit = () => {
+    if (!$test.name) {
+      return toast.error("Не указано название теста!");
+    }
+    if (!$test.questions.length) {
+      return toast.error("Должен быть указан как минимум 1 вопрос!");
+    }
+    $test.questions.forEach((question, index) => {
+      if (!question.title) {
+        return toast.error(`Пропущен заголовок вопроса №${index + 1}`);
+      }
+      if (question.type === TestTypes.OPTIONS) {
+        if (question.validOptionIndex === -1) {
+          return toast.error(
+            `Не указан правильный вариант ответа на вопрос №${index + 1}`,
+          );
+        }
+        if (
+          !question.options!.length ||
+          question.options!.filter((opt) => !opt).length
+        ) {
+          return toast.error(
+            `Не указаны варианты ответа на вопрос №${index + 1}`,
+          );
+        }
+      } else if (question.type === TestTypes.INPUT) {
+        if (!question.validTextInput) {
+          return toast.error(
+            `Не указан правильный ответ на вопрос №${index + 1}`,
+          );
+        }
+      }
+    });
+
+    onSubmit($test);
+  };
+
+  const addBlankTestQuestion = () => {
+    setTest({
+      ...$test,
+      questions: [
+        ...$test.questions,
+        {
+          title: "",
+          type: TestTypes.OPTIONS,
+          options: [],
+          validOptionIndex: -1,
+        } as ITestQuestion,
+      ],
+    });
+  };
+
+  const updateTestQuestion = (question: ITestQuestion) => {
+    const questions = [...$test.questions];
+    questions[pageNumber - 1] = question;
+
+    setTest({
+      ...$test,
+      questions,
+    });
+  };
+
+  const deleteTestQuestion = (index: number) => {
+    setTest({
+      ...$test,
+      questions: $test.questions.filter((val, ind) => ind !== index),
+    });
+    setPagesCount((prev) => {
+      if (pageNumber === prev) {
+        setPageNumber(prev - 1);
+      }
+      return prev - 1;
+    });
+  };
+
+  const onPageAdd = () => {
+    addBlankTestQuestion();
+    setPagesCount((prev) => {
+      setPageNumber(prev + 1);
+      return prev + 1;
+    });
+  };
+
+  const setTestName = (name: string) => {
+    setTest({
+      ...$test,
+      name,
     });
   };
 
   return (
-    <form onSubmit={onSubmitEH} className={styles.multiFieldForm}>
-      <div className={styles.formField}>
-        <label htmlFor="file">{uploadFileTitle}</label>
-        <input type="file" accept={acceptFileTypes} ref={fileRef} />
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "var(--spacing-2)",
-        }}
-      >
-        <button
-          type="submit"
-          title={submitButtonTitle}
-          aria-label={submitButtonTitle}
-          className={classNames(
-            styles.actionButton,
-            styles.primaryActionButton,
-          )}
-        >
-          {iconComponentFor("check")}
-        </button>
-
-        <Dialog.Close className={styles.actionButton}>
-          {iconComponentFor("close")}
-        </Dialog.Close>
-      </div>
-    </form>
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>{test ? "Редактирование" : "Создание"} теста</DialogTitle>
+      <DialogContent>
+        <Stack gap={2} my={1}>
+          <TextField
+            label={"Название теста"}
+            value={$test.name}
+            onChange={(event) => setTestName(event.target.value)}
+          />
+          <Question
+            question={$test.questions[pageNumber - 1]}
+            onUpdate={updateTestQuestion}
+            onDelete={() => deleteTestQuestion(pageNumber - 1)}
+            allowDelete={pagesCount !== 1}
+          />
+          <Stack
+            direction={"row"}
+            gap={2}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Pagination
+              count={pagesCount}
+              page={pageNumber}
+              onChange={(event, value) => setPageNumber(value)}
+            />
+            <IconButton onClick={onPageAdd}>
+              <AddIcon />
+            </IconButton>
+          </Stack>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={preSubmit}>Сохранить</Button>
+      </DialogActions>
+    </Dialog>
   );
-};
+}

@@ -18,7 +18,7 @@ import {
   PresentationDirectiveDescriptor,
 } from "./descriptors/pdf";
 import { FileDirectiveDescriptor } from "./descriptors/file/FileDescriptor";
-// import { TestDirectiveDescriptor } from "./descriptors/test/TestDescriptor";
+import { TestDirectiveDescriptor } from "./descriptors/test/TestDescriptor";
 
 export const plugins = [
   listsPlugin(),
@@ -38,7 +38,7 @@ export const plugins = [
       PdfDirectiveDescriptor,
       PresentationDirectiveDescriptor,
       FileDirectiveDescriptor,
-      // TestDirectiveDescriptor,
+      TestDirectiveDescriptor,
     ],
   }),
 ];

@@ -1,74 +1,54 @@
-// import { LeafDirective } from "mdast-util-directive";
-// import { DirectiveDescriptor, useMdastNodeUpdater } from "@mdxeditor/editor";
-// import React from "react";
-// import DescriptorTemplate from "../DescriptorTemplate";
+import { LeafDirective } from "mdast-util-directive";
+import { DirectiveDescriptor } from "@mdxeditor/editor";
+import React, { useEffect, useState } from "react";
+import DescriptorTemplate from "../DescriptorTemplate";
 
-// import { ITestForm } from "~/routes/tests.add";
-// import { TestForm } from "~/components/testForm/TestForm";
+import { useFetcher } from "@remix-run/react";
 
-// interface TestDirectiveNode extends LeafDirective {
-//   name: "test";
-//   attributes: ITestForm;
-// }
+interface TestDirectiveNode extends LeafDirective {
+  name: "test";
+  attributes: { id: string };
+}
 
-// interface RawTestForm {
-//   title: string;
-//   options: string;
-//   validOptionIndex: string;
-//   validTextInput: string;
-//   type: string;
-// }
+const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
+  name: "test",
+  type: "leafDirective",
+  testNode(node) {
+    return node.name === "test";
+  },
+  attributes: ["id"],
+  hasChildren: false,
+  Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
+    const mediaId = mdastNode.attributes!.id;
+    const [data, setData] = useState();
 
-// const parseTest = (rawTest: RawTestForm): ITestForm => {
-//   // Тест на вход может прийти двумя путями
-//   // 1. Через строку контента. В этом случае необходимо парсить
-//   // 2. Через обновление в админ панели. В этом случае парсить не нужно.
-//   // Все значения уже имеют нужный для работы формат.
-//   if (typeof rawTest.type === "number") return rawTest as ITestForm;
+    const fetcher = useFetcher();
 
-//   return {
-//     title: rawTest.title,
-//     options: rawTest.options ? rawTest.options.split(",") : undefined,
-//     validOptionIndex: Number.parseInt(rawTest.validOptionIndex),
-//     validTextInput: rawTest.validTextInput,
-//     type: Number.parseInt(rawTest.type),
-//   };
-// };
+    useEffect(() => {
+      fetcher.submit({ goal: "get-media", mediaId: Number.parseInt(mediaId) });
+    }, []);
 
-// const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
-//   name: "test",
-//   type: "leafDirective",
-//   testNode(node) {
-//     return node.name === "test";
-//   },
-//   attributes: [],
-//   hasChildren: false,
-//   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
-//     const updater = useMdastNodeUpdater();
-//     const onSubmit = (data: ITestForm) => {
-//       parentEditor.update(() => {
-//         updater({ attributes: { ...data, fromUpdater: true } });
-//       });
-//     };
+    useEffect(() => {
+      if (fetcher.data && fetcher.data.goal === "get-media") {
+        setData(fetcher.data.media.data);
+      }
+    }, [fetcher.data]);
 
-//     return (
-//       <DescriptorTemplate
-//         onDelete={() => {
-//           parentEditor.update(() => {
-//             lexicalNode.selectNext();
-//             lexicalNode.remove();
-//           });
-//         }}
-//       >
-//         <TestForm
-//           onSubmit={onSubmit}
-//           test={
-//             mdastNode.attributes ? parseTest(mdastNode.attributes) : undefined
-//           }
-//         />
-//       </DescriptorTemplate>
-//     );
-//   },
-// };
+    if (!data) return;
 
-// export { TestDirectiveDescriptor };
+    return (
+      <DescriptorTemplate
+        onDelete={() => {
+          parentEditor.update(() => {
+            lexicalNode.selectNext();
+            lexicalNode.remove();
+          });
+        }}
+      >
+        <Test test={data} />
+      </DescriptorTemplate>
+    );
+  },
+};
+
+export { TestDirectiveDescriptor };

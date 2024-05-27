@@ -1,43 +1,42 @@
-// import { LeafDirective } from "mdast-util-directive";
-// import { DirectiveDescriptor } from "@mdxeditor/editor";
-// import React from "react";
+import { LeafDirective } from "mdast-util-directive";
+import { DirectiveDescriptor } from "@mdxeditor/editor";
+import React, { useEffect, useState } from "react";
 
-// import Test, {ITestForm} from "~/components/Test";
+import Test from "../../../components/Test";
+import { useFetcher } from "@remix-run/react";
 
-// interface TestDirectiveNode extends LeafDirective {
-//   name: "test";
-//   attributes: ITestForm;
-// }
+interface TestDirectiveNode extends LeafDirective {
+  name: "test";
+  attributes: { id: string };
+}
 
-// interface RawTestForm {
-//   title: string;
-//   options: string;
-//   validOptionIndex: string;
-//   validTextInput: string;
-//   type: string;
-// }
+const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
+  name: "test",
+  type: "leafDirective",
+  testNode(node) {
+    return node.name === "test";
+  },
+  attributes: ["id"],
+  hasChildren: false,
+  Editor: ({ mdastNode }) => {
+    const mediaId = mdastNode.attributes!.id;
+    const [data, setData] = useState();
 
-// const parseTest = (rawTest: RawTestForm): ITestForm => {
-//   return {
-//     title: rawTest.title,
-//     options: rawTest.options ? rawTest.options.split(",") : undefined,
-//     validOptionIndex: Number.parseInt(rawTest.validOptionIndex),
-//     validTextInput: rawTest.validTextInput,
-//     type: Number.parseInt(rawTest.type)
-//   }
-// }
+    const fetcher = useFetcher();
 
-// const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
-//   name: "test",
-//   type: "leafDirective",
-//   testNode(node) {
-//     return node.name === "test";
-//   },
-//   attributes: [],
-//   hasChildren: false,
-//   Editor: ({ mdastNode }) => {
-//     return <Test test={parseTest(mdastNode.attributes!)} />;
-//   },
-// };
+    useEffect(() => {
+      fetcher.submit({ goal: "get-media", mediaId: Number.parseInt(mediaId) });
+    }, []);
 
-// export { TestDirectiveDescriptor };
+    useEffect(() => {
+      if (fetcher.data && fetcher.data.goal === "get-media") {
+        setData(fetcher.data.media.data);
+      }
+    }, [fetcher.data]);
+
+    if (!data) return;
+    return <Test test={data} />;
+  },
+};
+
+export { TestDirectiveDescriptor };
