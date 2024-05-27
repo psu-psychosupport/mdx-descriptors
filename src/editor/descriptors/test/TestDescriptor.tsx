@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import DescriptorTemplate from "../DescriptorTemplate";
 
 import { useFetcher } from "@remix-run/react";
+import Test from "../../../components/Test";
 
 interface TestDirectiveNode extends LeafDirective {
   name: "test";
@@ -25,12 +26,12 @@ const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
     const fetcher = useFetcher();
 
     useEffect(() => {
-      fetcher.submit({ goal: "get-media", mediaId: Number.parseInt(mediaId) });
+      fetcher.submit({ goal: "get-media", mediaId: Number.parseInt(mediaId) }, {method: "POST", encType: "application/json"});
     }, []);
 
     useEffect(() => {
       if (fetcher.data && fetcher.data.goal === "get-media") {
-        setData(JSON.parse(fetcher.data.data));
+        setData(fetcher.data.data.data);
       }
     }, [fetcher.data]);
 

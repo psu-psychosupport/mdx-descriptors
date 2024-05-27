@@ -24,7 +24,6 @@ export default function InsertTest() {
 
   useEffect(() => {
     if (!fetcher.data || fetcher.data.goal !== "add-test") return;
-
     insert(fetcher.data.data.id);
   }, [fetcher.data]);
 
