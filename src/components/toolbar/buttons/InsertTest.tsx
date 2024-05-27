@@ -23,9 +23,9 @@ export default function InsertTest() {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    if (!fetcher.data) return;
+    if (!fetcher.data || fetcher.data.goal !== "add-test") return;
 
-    insert(fetcher.data.media.id);
+    insert(fetcher.data.data.id);
   }, [fetcher.data]);
 
   const insert = (id: number) => {

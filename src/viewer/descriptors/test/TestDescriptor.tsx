@@ -30,7 +30,7 @@ const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
 
     useEffect(() => {
       if (fetcher.data && fetcher.data.goal === "get-media") {
-        setData(fetcher.data.media.data);
+        setData(JSON.parse(fetcher.data.data));
       }
     }, [fetcher.data]);
 
