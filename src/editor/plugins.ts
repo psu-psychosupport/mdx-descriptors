@@ -20,7 +20,7 @@ import {
     PresentationDirectiveDescriptor,
   } from "./descriptors/pdf";
   import {FileDirectiveDescriptor} from "./descriptors/file/FileDescriptor";
-//   import {TestDirectiveDescriptor} from "./descriptors/test/TestDescriptor";
+  import {TestDirectiveDescriptor} from "./descriptors/test/TestDescriptor";
   
   export const plugins = (uploadImage: (image: File) => Promise<string>) => [
     toolbarPlugin({
@@ -45,7 +45,7 @@ import {
         PdfDirectiveDescriptor,
         PresentationDirectiveDescriptor,
         FileDirectiveDescriptor,
-        // TestDirectiveDescriptor,
+        TestDirectiveDescriptor,
       ],
     }),
   ];
