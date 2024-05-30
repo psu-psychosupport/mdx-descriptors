@@ -20,18 +20,18 @@ const TestDirectiveDescriptor: DirectiveDescriptor<TestDirectiveNode> = {
   attributes: ["id"],
   hasChildren: false,
   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
-    const mediaId = mdastNode.attributes!.id;
+    const testId = mdastNode.attributes!.id;
     const [data, setData] = useState();
 
     const fetcher = useFetcher();
 
     useEffect(() => {
-      fetcher.submit({ goal: "get-media", mediaId: Number.parseInt(mediaId) }, {method: "POST", encType: "application/json"});
+      fetcher.submit({ goal: "get-test", testId: Number.parseInt(testId) }, {method: "POST", encType: "application/json"});
     }, []);
 
     useEffect(() => {
-      if (fetcher.data && fetcher.data.goal === "get-media") {
-        setData(fetcher.data.data.data);
+      if (fetcher.data && fetcher.data.goal === "get-test") {
+        setData(fetcher.data.data);
       }
     }, [fetcher.data]);
 
